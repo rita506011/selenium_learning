@@ -8,6 +8,8 @@ from variables_global import *
 
 
 class BrowserController:
+    logger = SeleniumEasyLogging().loggingInit(__name__)
+
     @classmethod
     def openBrowserChrome(cls, url=STR_URL_SELENIUM_EASY_DEMO):
         """
@@ -33,4 +35,5 @@ class BrowserController:
             WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
                 EC.presence_of_element_located((By.XPATH, xpath))).click()
         except Exception as e:
-            raise Exception(e)
+            print(e)
+            self.logger.exception(e)
