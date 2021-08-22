@@ -26,3 +26,17 @@ handlers:
 root:  # default setting
   level: INFO
   handlers: [file_handler]
+
+loggers:  # module setting
+  selenium.webdriver.remote.remote_connection:
+    level: WARNING
+    handlers: [ file_handler ]
+    propagate: no
+  urllib3.connectionpool:
+    level: WARNING
+    handlers: [ file_handler ]
+    propagate: no
+  test_basic_level:
+    level: INFO
+    handlers: [file_handler]
+    propagate: no

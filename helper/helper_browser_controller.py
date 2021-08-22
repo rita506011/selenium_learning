@@ -17,6 +17,7 @@ class BrowserController:
         """
         cls.chrome_browser = webdriver.Chrome(ChromeDriverManager().install())
         cls.chrome_browser.implicitly_wait(INT_IMPLICITLY_TIMEOUT)
+        cls.chrome_browser.maximize_window()  # resolve element duplicate problem
         cls.chrome_browser.get(url)
 
     @classmethod
@@ -34,6 +35,30 @@ class BrowserController:
         try:
             WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
                 EC.presence_of_element_located((By.XPATH, xpath))).click()
+        except Exception as e:
+            print(e)
+            self.logger.exception(e)
+
+    def inputText(self, xpath, text='text'):
+        """
+        Input text by xpath.
+        """
+        try:
+            element = WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
+                EC.presence_of_element_located((By.XPATH, xpath)))
+            element.clear()
+            element.send_keys(text)
+        except Exception as e:
+            print(e)
+            self.logger.exception(e)
+
+    def getText(self, xpath):
+        """
+        Return text by xpath.
+        """
+        try:
+            return WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
+                EC.presence_of_element_located((By.XPATH, xpath))).text
         except Exception as e:
             print(e)
             self.logger.exception(e)
