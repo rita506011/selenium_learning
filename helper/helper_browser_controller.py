@@ -30,11 +30,22 @@ class BrowserController:
 
     def buttonClick(self, xpath):
         """
-        Click button element by xpath.
+        Click button element or check/uncheck checkbox by xpath.
         """
         try:
             WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
                 EC.presence_of_element_located((By.XPATH, xpath))).click()
+        except Exception as e:
+            print(e)
+            self.logger.exception(e)
+
+    def isCheckedCheckbox(self, xpath):
+        """
+        Get checkbox status by xpath.
+        """
+        try:
+            return WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
+                EC.presence_of_element_located((By.XPATH, xpath))).is_selected()
         except Exception as e:
             print(e)
             self.logger.exception(e)
@@ -59,6 +70,18 @@ class BrowserController:
         try:
             return WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
                 EC.presence_of_element_located((By.XPATH, xpath))).text
+        except Exception as e:
+            print(e)
+            self.logger.exception(e)
+
+    def getAttribute(self, xpath, attribute):
+        """
+        Return value of attribute by xpath.
+        """
+        try:
+            element = WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
+                EC.presence_of_element_located((By.XPATH, xpath)))
+            return element.get_attribute(attribute)
         except Exception as e:
             print(e)
             self.logger.exception(e)
