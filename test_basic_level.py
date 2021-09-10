@@ -142,6 +142,30 @@ class TestBasicLevel(SeleniumEasyInit):
         assert not get_checked_list, f'At least one checkbox is checked. Checked: {get_checked_list}'
         assert get_btn_value == btn_check_all_text, f'Button text is not "{btn_check_all_text}". Actual result is "{get_btn_value}".'
 
+    def test_select_dropdown_first_check_default_text(self):
+        self.browser_controller.buttonClick(STR_XPATH_BTN_SELECT_DROPDOWN)
+        correct_options = ['Please select', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        get_options = self.browser_controller.getDropdownAllOptionText(STR_XPATH_DROPDOWN_SELECT_FIRST_DROPDOWN)
+        self.logger.debug(f'Get options: {get_options}')
+        assert get_options == correct_options, f'Options list is not {correct_options}, actual result is {get_options}.'
+
+    def test_select_dropdown_first(self):
+        self.browser_controller.buttonClick(STR_XPATH_BTN_SELECT_DROPDOWN)
+        dropdown_list = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        for option in dropdown_list:
+            self.browser_controller.dropdownSelect(STR_XPATH_DROPDOWN_SELECT_FIRST_DROPDOWN, option)
+            get_selected = self.browser_controller.getText(STR_XPATH_TEXT_SELECT_FIRST_SHOW_TEXT)
+            self.logger.debug(f'Selected value is "{get_selected}".')
+            assert get_selected == f'Day selected :- {option}',\
+                f'Message should be "Day selected :- {option}", actual result is "{get_selected}".'
+
+    def test_select_dropdown_multi_check_default_text(self):
+        self.browser_controller.buttonClick(STR_XPATH_BTN_SELECT_DROPDOWN)
+        correct_options = ['California', 'Florida', 'New Jersey', 'New York', 'Ohio', 'Texas', 'Pennsylvania', 'Washington']
+        get_options = self.browser_controller.getDropdownAllOptionText(STR_XPATH_DROPDOWN_SELECT_MULTI_DROPDOWN)
+        self.logger.debug(f'Get options: {get_options}')
+        assert get_options == correct_options, f'Options list is not {correct_options}, actual result is {get_options}.'
+
     def _check_box_is_checked(self):
         """
         For form 'Check Box Demo', return a list that checkbox is checked.

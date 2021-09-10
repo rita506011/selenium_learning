@@ -19,3 +19,11 @@ STR_XPATH_CHECKBOX_CHECK_MULTIPLE_OPTION_2 = '//*[@id="easycont"]/div/div[2]/div
 STR_XPATH_CHECKBOX_CHECK_MULTIPLE_OPTION_3 = '//*[@id="easycont"]/div/div[2]/div[2]/div[2]/div[3]/label/input'
 STR_XPATH_CHECKBOX_CHECK_MULTIPLE_OPTION_4 = '//*[@id="easycont"]/div/div[2]/div[2]/div[2]/div[4]/label/input'
 STR_XPATH_BTN_CHECK_MULTIPLE_ALL = '//*[@id="check1"]'
+# Select Dropdown List
+STR_XPATH_BTN_SELECT_DROPDOWN = '//*[@id="basic"]/div/a[4]'
+STR_XPATH_DROPDOWN_SELECT_FIRST_DROPDOWN = '//*[@id="select-demo"]'
+STR_XPATH_TEXT_SELECT_FIRST_SHOW_TEXT = '//*[@id="easycont"]/div/div[2]/div[1]/div[2]/p[2]'
+STR_XPATH_DROPDOWN_SELECT_MULTI_DROPDOWN = '//*[@id="multi-select"]'
+STR_XPATH_BTN_SELECT_MULTI_FIRST_SELECTED = '//*[@id="printMe"]'
+STR_XPATH_BTN_SELECT_MULTI_ALL_SELECTED = '//*[@id="printAll"]'
+STR_XPATH_TEXT_SELECT_MULTI_SHOW_TEXT = '//*[@id="easycont"]/div/div[2]/div[2]/div[2]/p[2]'

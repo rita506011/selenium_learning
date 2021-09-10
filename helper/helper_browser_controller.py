@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.select import Select
 from variables_global import *
 
 
@@ -35,6 +36,19 @@ class BrowserController:
         try:
             WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
                 EC.presence_of_element_located((By.XPATH, xpath))).click()
+        except Exception as e:
+            print(e)
+            self.logger.exception(e)
+
+    def dropdownSelect(self, xpath, text):
+        """
+        Select dropdown list text by xpath.
+        """
+        try:
+            element = WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
+                EC.presence_of_element_located((By.XPATH, xpath)))
+            dropdown = Select(element)
+            dropdown.select_by_visible_text(text)
         except Exception as e:
             print(e)
             self.logger.exception(e)
@@ -85,3 +99,32 @@ class BrowserController:
         except Exception as e:
             print(e)
             self.logger.exception(e)
+
+    def getDropdownAllOptionText(self, xpath):
+        """
+        Get All text value of dropdown list by xpath.
+        """
+        try:
+            element = WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
+                EC.presence_of_element_located((By.XPATH, xpath)))
+            dropdown = Select(element)
+            dropdown_options = []
+            for index in range(0, len(dropdown.options)):
+                dropdown_options.append(dropdown.options[index].text)
+            return dropdown_options
+        except Exception as e:
+            print(e)
+            self.logger.exception(e)
+
+    # def getDropdownSelected(self, xpath):
+    #     """
+    #     Get selected text of dropdown list by xpath.
+    #     """
+    #     try:
+    #         element = WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
+    #             EC.presence_of_element_located((By.XPATH, xpath)))
+    #         dropdown = Select(element)
+    #         return dropdown.first_selected_option.text
+    #     except Exception as e:
+    #         print(e)
+    #         self.logger.exception(e)
