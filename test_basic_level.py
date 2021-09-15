@@ -81,7 +81,7 @@ class TestBasicLevel(SeleniumEasyInit):
     def test_check_box_single(self):
         self.browser_controller.buttonClick(STR_XPATH_BTN_CHECK_BOX)
         # check default status
-        checkbox_status = self.browser_controller.isCheckedCheckbox(STR_XPATH_CHECKBOX_CHECK_SINGLE_CHECKBOX)
+        checkbox_status = self.browser_controller.isCheckedCheckboxorRadio(STR_XPATH_CHECKBOX_CHECK_SINGLE_CHECKBOX)
         self.logger.debug('Checkbox default status is %s.' % ('checked' if checkbox_status else 'unchecked'))
         assert checkbox_status is False, 'Default value is wrong, should be unchecked.'
         # checked checkbox
@@ -142,6 +142,62 @@ class TestBasicLevel(SeleniumEasyInit):
         assert not get_checked_list, f'At least one checkbox is checked. Checked: {get_checked_list}'
         assert get_btn_value == btn_check_all_text, f'Button text is not "{btn_check_all_text}". Actual result is "{get_btn_value}".'
 
+    def test_radio_buttons_first_default_check(self):
+        self.browser_controller.buttonClick(STR_XPATH_BTN_RADIO_BUTTONS)
+        radio_male_status = self.browser_controller.isCheckedCheckboxorRadio(STR_XPATH_RADIO_RADIO_FIRST_RADIO_MALE)
+        radio_female_status = self.browser_controller.isCheckedCheckboxorRadio(STR_XPATH_RADIO_RADIO_FIRST_RADIO_FEMALE)
+        self.logger.debug('Radio male status is %s, radio female status is %s.'
+                          % (('checked' if radio_male_status else 'unchecked'), ('checked' if radio_female_status else 'unchecked')))
+        assert radio_male_status is False and radio_female_status is False,\
+                f'Radio button default status is wrong, male is {radio_male_status} and female is {radio_female_status}.'
+        self.browser_controller.buttonClick(STR_XPATH_BTN_RADIO_FIRST_SHOW)
+        get_show_msg = self.browser_controller.getText(STR_XPATH_TEXT_RADIO_FIRST_SHOW_MSG)
+        self.logger.debug('Get show message is "%s".' % get_show_msg)
+        assert get_show_msg == 'Radio button is Not checked', f'Show message is wrong. Actual result is "{get_show_msg}".'
+
+    def test_radio_buttons_first(self):
+        self.browser_controller.buttonClick(STR_XPATH_BTN_RADIO_BUTTONS)
+        radio_button_list = ['Male', 'Female']
+        for option in radio_button_list:
+            # radio button
+            self.browser_controller.buttonClick(globals()[f'STR_XPATH_RADIO_RADIO_FIRST_RADIO_{option.upper()}'])
+            radio_status = self.browser_controller.isCheckedCheckboxorRadio(globals()[f'STR_XPATH_RADIO_RADIO_FIRST_RADIO_{option.upper()}'])
+            self.logger.debug(f'Radio {option} status is %s.' % (('checked' if radio_status else 'unchecked')))
+            assert radio_status is True, f'Radio button status is wrong, {option} is {radio_status}.'
+            # get show message
+            self.browser_controller.buttonClick(STR_XPATH_BTN_RADIO_FIRST_SHOW)
+            get_show_msg = self.browser_controller.getText(STR_XPATH_TEXT_RADIO_FIRST_SHOW_MSG)
+            self.logger.debug('Get show message is "%s".' % get_show_msg)
+            assert get_show_msg == f'Radio button \'{option}\' is checked', f'Show message is wrong. Actual result is "{get_show_msg}".'
+
+    def test_radio_buttons_group_default_check(self):
+        self.browser_controller.buttonClick(STR_XPATH_BTN_RADIO_BUTTONS)
+        radio_button_list = ['Male', 'Female', '0', '5', '15']
+        for option in radio_button_list:
+            radio_status = self.browser_controller.isCheckedCheckboxorRadio(globals()[f'STR_XPATH_RADIO_RADIO_GROUP_RADIO_{option.upper()}'])
+            self.logger.debug(f'Radio {option} status is %s.' % (('checked' if radio_status else 'unchecked')))
+            assert radio_status is False, f'Radio button default status is wrong, {option} is {radio_status}.'
+        self.browser_controller.buttonClick(STR_XPATH_BTN_RADIO_GROUP_SHOW)
+        get_show_msg = self.browser_controller.getText(STR_XPATH_TEXT_RADIO_GROUP_SHOW_MSG)
+        self.logger.debug('Get show message is "%s".' % get_show_msg)
+        assert get_show_msg == f'Sex :\nAge group:', f'Show message is wrong. Actual result is "{get_show_msg}".'
+
+    def test_radio_buttons_group(self):
+        self.browser_controller.buttonClick(STR_XPATH_BTN_RADIO_BUTTONS)
+        radio_button_sex_list = ['Male', 'Female']
+        radio_button_age_list = ['0', '5', '15', '50']
+        for sex in radio_button_sex_list:
+            for age_key in range(0, len(radio_button_age_list)-1):
+                # click radio button
+                self.browser_controller.buttonClick(globals()[f'STR_XPATH_RADIO_RADIO_GROUP_RADIO_{sex.upper()}'])
+                self.browser_controller.buttonClick(globals()[f'STR_XPATH_RADIO_RADIO_GROUP_RADIO_{radio_button_age_list[age_key]}'])
+                # get message
+                self.browser_controller.buttonClick(STR_XPATH_BTN_RADIO_GROUP_SHOW)
+                get_show_msg = self.browser_controller.getText(STR_XPATH_TEXT_RADIO_GROUP_SHOW_MSG)
+                self.logger.debug('Get show message is "%s".' % get_show_msg)
+                assert get_show_msg == f'Sex : {sex}\nAge group: {radio_button_age_list[age_key]} - {radio_button_age_list[age_key+1]}',\
+                        f'Show message is wrong. Actual result is "{get_show_msg}".'
+
     def _check_box_is_checked(self):
         """
         For form 'Check Box Demo', return a list that checkbox is checked.
@@ -149,7 +205,7 @@ class TestBasicLevel(SeleniumEasyInit):
         checked_list = []
         for option in range(1, 5):
             checkbox_status = self.browser_controller. \
-                isCheckedCheckbox(globals()[f'STR_XPATH_CHECKBOX_CHECK_MULTIPLE_OPTION_{option}'])
+                isCheckedCheckboxorRadio(globals()[f'STR_XPATH_CHECKBOX_CHECK_MULTIPLE_OPTION_{option}'])
             self.logger.debug('Checkbox option %d status is %s.'
                               % (option, ('checked' if checkbox_status else 'unchecked')))
             if checkbox_status is True:
