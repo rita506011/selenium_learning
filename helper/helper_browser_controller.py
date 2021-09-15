@@ -39,9 +39,9 @@ class BrowserController:
             print(e)
             self.logger.exception(e)
 
-    def isCheckedCheckbox(self, xpath):
+    def isCheckedCheckboxOrRadio(self, xpath):
         """
-        Get checkbox status by xpath.
+        Get checkbox or Radio button status by xpath.
         """
         try:
             return WebDriverWait(self.chrome_browser, INT_EXPLICITLY_TIMEOUT).until(
